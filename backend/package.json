@@ -9,6 +9,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "typescript": "^5.5.3"
+    "@types/ws": "^8.5.12",
+    "typescript": "^5.5.3",
+    "ws": "^8.18.0"
   }
 }
