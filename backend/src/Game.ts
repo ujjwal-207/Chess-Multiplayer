@@ -5,7 +5,7 @@ import { GAME_OVER, INIT_GAME, MOVE } from "./message";
 export class Game {
   public player1: WebSocket;
   public player2: WebSocket;
-  private board: Chess;
+  public board: Chess;
   private startTime: Date;
   private moveCount = 0;
 
@@ -13,7 +13,6 @@ export class Game {
     this.player1 = player1;
     this.player2 = player2;
     this.board = new Chess();
-
     this.startTime = new Date();
     this.player1.send(
       JSON.stringify({
@@ -32,6 +31,7 @@ export class Game {
       })
     );
   }
+
   makeMove(
     socket: WebSocket,
     move: {
@@ -42,15 +42,17 @@ export class Game {
     if (this.moveCount % 2 === 0 && socket !== this.player1) {
       return;
     }
-    if (this.moveCount % 2 === 0 && socket !== this.player2) {
+    if (this.moveCount % 2 === 1 && socket !== this.player2) {
       return;
     }
+
     try {
       this.board.move(move);
     } catch (e) {
       console.log(e);
       return;
     }
+
     if (this.board.isGameOver()) {
       this.player1.emit(
         JSON.stringify({
@@ -60,8 +62,17 @@ export class Game {
           },
         })
       );
+      this.player2.emit(
+        JSON.stringify({
+          type: GAME_OVER,
+          payload: {
+            winner: this.board.turn() === "w" ? "black" : "white",
+          },
+        })
+      );
       return;
     }
+
     if (this.moveCount % 2 === 0) {
       this.player2.send(
         JSON.stringify({
