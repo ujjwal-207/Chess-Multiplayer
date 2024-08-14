@@ -5,7 +5,7 @@ import { Game } from "./Game";
 export class GameManager {
   private games: Game[];
   private pendingUser: WebSocket | null;
-  private users: [];
+  private users: WebSocket[];
 
   constructor() {
     this.games = [];
@@ -34,10 +34,12 @@ export class GameManager {
         }
       }
       if (message.type === MOVE) {
+        console.log("inside move");
         const game = this.games.find(
           (game) => game.player1 === socket || game.player2 === socket
         );
         if (game) {
+          console.log("inside move");
           game.makeMove(socket, message.move);
         }
       }
