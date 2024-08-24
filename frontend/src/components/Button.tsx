@@ -6,8 +6,7 @@ export const Button = ({
   children: React.ReactNode;
 }) => {
   return (
-    <button onClick={onClick} className="px-8 py-4 text-2xl bg-green -500">
-      Play
+    <button onClick={onClick} className="px-8 py-4 text-2xl bg-cyan-600">
       {children}
     </button>
   );
